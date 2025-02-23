@@ -14,7 +14,7 @@ spec:
     - http:
         paths:
           # 1) Direct requests to "/api/login" to murphy-auth-service
-          - path: /api/login # Defines the path for login requests
+          - path: /cs122b-project5-murphy-movies/api/login # Defines the path for login requests
             pathType: Prefix # Any request beginning with /api/login/ goes here
             backend:
               service:
