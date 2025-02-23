@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: murphy-auth-container # Names the container within the Pod as "murphy-auth-container".
-          image: chenliteaching/cs122b-p5-murphy:v2 # Uses the same Docker image as murphy-movies.
+          image: nickfang1996/cs122b-p5-murphy-login:v2 # Uses the same Docker image as murphy-movies.
           ports:
             - name: http
               containerPort: 8080 # Exposes port 8080 of the container.
