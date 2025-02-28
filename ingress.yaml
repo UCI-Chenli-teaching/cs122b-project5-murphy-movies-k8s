@@ -13,7 +13,7 @@ spec:
   rules:
     - http:
         paths:
-          # 1) Direct requests to "/api/login" to murphy-login-service
+          # 1) Direct requests to "login" to murphy-login-service
           - path: /cs122b-project5-murphy-movies/api/login # Defines the path for login requests
             pathType: Prefix # Any request beginning with /api/login/ goes here
             backend:
@@ -21,7 +21,20 @@ spec:
                 name: murphy-login-service # Name of the Service to route to (matches "murphy-login.yaml")
                 port:
                   number: 8080 # The port on which murphy-login-service is exposed
-
+          - path: /cs122b-project5-murphy-movies/login.html # Defines the path for login html file
+            pathType: ImplementationSpecific # Only exact matches go here
+            backend:
+              service:
+                name: murphy-login-service # Name of the Service to route to (matches "murphy-login.yaml")
+                port:
+                  number: 8080 # The port on which murphy-login-service is exposed
+          - path: /cs122b-project5-murphy-movies/login.js # Defines the path for login js file
+            pathType: ImplementationSpecific # Only exact matches go here
+            backend:
+              service:
+                name: murphy-login-service # Name of the Service to route to (matches "murphy-login.yaml")
+                port:
+                  number: 8080 # The port on which murphy-login-service is exposed
           # 2) Direct all other requests ("/") to murphy-star-service
           - path: / # Defines the root path for all other requests
             pathType: Prefix
