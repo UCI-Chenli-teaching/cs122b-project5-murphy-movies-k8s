@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: murphy-star-container
-          image: nickfang1996/cs122b-p5-murphy-star:v2
+          image: nickfang1996/cs122b-p5-murphy-star:v1
           ports:
             - name: http
               containerPort: 8080
@@ -53,7 +53,7 @@ spec:
     spec:
       containers:
         - name: murphy-login-container
-          image: nickfang1996/cs122b-p5-murphy-login:v2
+          image: nickfang1996/cs122b-p5-murphy-login:v1
           ports:
             - name: http
               containerPort: 8080
