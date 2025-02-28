@@ -1,22 +1,32 @@
 apiVersion: networking.k8s.io/v1
-kind: Ingress
+kind: Ingress # Specifies that this resource is an Ingress, controlling external access to Services.
 metadata:
-  annotations:
-    kubernetes.io/ingress.class: nginx # Specifies that this Ingress resource should be handled by the nginx Ingress controller.
-    nginx.ingress.kubernetes.io/affinity: "cookie" # # Enables session affinity based on cookies, ensuring requests from the same client are routed to the same backend.
-    nginx.ingress.kubernetes.io/session-cookie-name: "stickounet" # Sets the name of the session cookie used for maintaining session affinity.
-    nginx.ingress.kubernetes.io/session-cookie-expires: "172800" # Specifies the expiration time of the session cookie in seconds (172800 seconds = 2 days).
-    nginx.ingress.kubernetes.io/session-cookie-max-age: "172800" # Sets the maximum age of the session cookie in seconds, aligning with the expiration time.
   name: murphy-movies-ingress # Names this Ingress resource as "murphy-movies-ingress".
-  namespace: default
+  namespace: default # Puts this resource in the "default" namespace. Adjust if needed.
+  annotations:
+    kubernetes.io/ingress.class: nginx # Specifies the Ingress controller (nginx) to use.
+    nginx.ingress.kubernetes.io/affinity: "cookie" # Enables session affinity (sticky sessions).
+    nginx.ingress.kubernetes.io/session-cookie-name: "stickounet" # Names the session cookie.
+    nginx.ingress.kubernetes.io/session-cookie-expires: "172800" # Expires in 2 days.
+    nginx.ingress.kubernetes.io/session-cookie-max-age: "172800" # Max age of the cookie is also 2 days.
 spec:
   rules:
     - http:
         paths:
-          - backend:
+          # 1) Direct requests to "/api/login" to murphy-login-service
+          - path: /cs122b-project5-murphy-movies/api/login # Defines the path for login requests
+            pathType: Prefix # Any request beginning with /api/login/ goes here
+            backend:
               service:
-                name: murphy-movies-service # Points to the service named "murphy-movies-service". The value should match the name of the service.
+                name: murphy-login-service # Name of the Service to route to (matches "murphy-login.yaml")
                 port:
-                  number: 8080 # Specifies that the service is listening on port 8080.
-            path: / # # Defines the path to match incoming requests. Here, "/" means the root path.
-            pathType: Prefix # # Indicates that the path is a prefix match, so any request path starting with "/" will be routed to the backend service.
+                  number: 8080 # The port on which murphy-login-service is exposed
+
+          # 2) Direct all other requests ("/") to murphy-star-service
+          - path: / # Defines the root path for all other requests
+            pathType: Prefix
+            backend:
+              service:
+                name: murphy-star-service # The Service for murphy-star
+                port:
+                  number: 8080 # The port on which murphy-star-service is exposed
