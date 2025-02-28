@@ -21,8 +21,15 @@ spec:
                 name: murphy-login-service # Name of the Service to route to (matches "murphy-login.yaml")
                 port:
                   number: 8080 # The port on which murphy-login-service is exposed
-          - path: /cs122b-project5-murphy-movies/login # Defines the path for login html file
-            pathType: Prefix
+          - path: /cs122b-project5-murphy-movies/login.html # Defines the path for login html file
+            pathType: ImplementationSpecific # Only exact matches go here
+            backend:
+              service:
+                name: murphy-login-service # Name of the Service to route to (matches "murphy-login.yaml")
+                port:
+                  number: 8080 # The port on which murphy-login-service is exposed
+          - path: /cs122b-project5-murphy-movies/login.js # Defines the path for login js file
+            pathType: ImplementationSpecific # Only exact matches go here
             backend:
               service:
                 name: murphy-login-service # Name of the Service to route to (matches "murphy-login.yaml")
