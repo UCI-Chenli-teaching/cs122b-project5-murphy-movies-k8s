@@ -8,15 +8,27 @@ This repo contains kubernetes scripts to be executed in your Ubuntu instance aft
     kubectl create secret docker-registry regcred --docker-server=https://index.docker.io/v1/ --docker-username=<YOUR_DOCKER_USERNAME> --docker-password=<YOUR DOCKER PASSWORD> --docker-email=<YOUR DOCKER EMAIL>
     ```
 3. Set up MySQL pods through the helm chart.
-```
-helm install mysql --set auth.rootPassword=root,auth.database=murphymovies,auth.username=murphyuser,auth.password='My7$Password',secondary.persistence.enabled=true,secondary.persistence.size=2Gi,primary.persistence.enabled=true,primary.persistence.size=2Gi,architecture=replication,auth.replicationPassword=texera,secondary.replicaCount=1 oci://registry-1.docker.io/bitnamicharts/mysql
-```
-Test by running `kubectl get pods`, both mysql pods should be in `RUNNING` state and `READY (1/1)`.
+   ```
+   helm install mysql --set auth.rootPassword=root,auth.database=murphymovies,auth.username=murphyuser,auth.password='My7$Password',secondary.persistence.enabled=true,secondary.persistence.size=2Gi,primary.persistence.enabled=true,primary.persistence.size=2Gi,architecture=replication,auth.replicationPassword=texera,secondary.replicaCount=1 oci://registry-1.docker.io/bitnamicharts/mysql
+   ```
+   Check the state of pods, both mysql pods should be in `RUNNING` state and `READY (1/1)`.
+   ```
+   kubectl get pods
+   ```
 4. Populate MySQL database => 
-   1. Run `kubectl exec -it pod/mysql-primary-0 -- /bin/bash`.
-   2. Run `mysql -u root -p` & enter password as `root`.
+   1. Run 
+   ```
+   kubectl exec -it pod/mysql-primary-0 -- /bin/bash
+   ```
+   2. Login, enter password as `root`.
+   ```
+   mysql -u root -p
+   ```
    3. Run the SQL scripts from [Murphy Movies repo](https://github.com/UCI-Chenli-teaching/cs122b-project5-murphy-movies?tab=readme-ov-file#prepare-the-database-murphymovies).
-   4. Grant `murphyuser` privileges: `GRANT ALL PRIVILEGES ON * . * TO 'murphyuser'@'%';`
+   4. Grant `murphyuser` privileges: 
+   ```
+   GRANT ALL PRIVILEGES ON * . * TO 'murphyuser'@'%';
+   ```
 5. Enable ingress in your AWS cluster.
    1. Run the following to install ingress-nginx.
    ```
@@ -26,13 +38,35 @@ Test by running `kubectl get pods`, both mysql pods should be in `RUNNING` state
    ```
 ## Steps to deploy scripts
 1. Clone the repo into your Ubuntu instance
-2. Run `kubectl apply -f murphy-movies.yaml`. 
-   1. Test by running `kubectl get pods`, both murphy-movie pod should be in `RUNNING` state and `READY (1/1)`. 
-   2. If your pod is showing as `PENDING`, run `kubectl describe <POD_NAME>` and inspect the lifecycle of the pod to debug further. 
-   3. Run `kubectl logs <MURPHY_MOVIES_POD_NAME>`. If you see JDBC connection exceptions, you haven't configured MySQL properly. Check the username, password, user permissions for your MySQL user, database name. After fixing any errors, you run `kubectl delete -f murphy-movies.yaml `and repeat Step 2.
-3. Run `kubectl apply -f ingress.yaml`.
-4. Run `kubectl get ingress` to see your list of ingresses.
-5. You should see an `ADDRESS` after a couple of minutes. You can then access the application on http://<AWS_ELB_URL>/cs122b-project5-murphy-movies.
-![img.png](img.png)
-6. You can also test whether sticky sessions work by inspecting cookies to find `stickounet` cookie. This cookie is used for identifying which pod your request will be routed to.
-![img_1.png](img_1.png)
+2. Run 
+   ```
+   kubectl apply -f murphy-movies.yaml
+   ```
+   1. Check the state of pods, both murphy-movie pod should be in `RUNNING` state and `READY (1/1)`.
+   ```
+   kubectl get pods
+   ```
+   2. If your pod is showing as `PENDING`, inspect the lifecycle of the pod to debug further by running
+   ```
+   kubectl describe <POD_NAME>
+   ```
+   3. Run 
+   ```
+   kubectl logs <MURPHY_MOVIES_POD_NAME>
+   ```
+   If you see JDBC connection exceptions, you haven't configured MySQL properly. Check the username, password, user permissions for your MySQL user, database name. After fixing any errors, you run `kubectl delete -f murphy-movies.yaml `and repeat Step 2.
+   4. Run 
+   ```
+   kubectl apply -f ingress.yaml
+   ```
+   5. See your list of ingresses by running
+   ```
+   kubectl get ingress
+   ```
+   6. You should see an `ADDRESS` after a couple of minutes. You can then access the application on 
+   ```
+   http://<AWS_ELB_URL>/cs122b-project5-murphy-movies
+   ```
+   ![img.png](img.png)
+   7. You can also test whether sticky sessions work by inspecting cookies to find `stickounet` cookie. This cookie is used for identifying which pod your request will be routed to.
+   ![img_1.png](img_1.png)
