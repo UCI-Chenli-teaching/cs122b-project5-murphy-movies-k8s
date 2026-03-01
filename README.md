@@ -27,6 +27,7 @@ Test by running `kubectl get pods`, both mysql pods should be in `RUNNING` state
 6. Deploy Redis service/pod for application session and state storage (defined in `murphy-movies.yaml`).
 ## Steps to deploy scripts
 1. Clone the repo into your Ubuntu instance
+   - Before applying `murphy-movies.yaml`, replace `<YOUR_DOCKERHUB_USERNAME>` in image names with your DockerHub username.
 2. Run `kubectl apply -f murphy-movies.yaml`. 
    1. Test by running `kubectl get pods`, redis/login/star pods should be in `RUNNING` state and `READY (1/1)`. 
    2. If your pod is showing as `PENDING`, run `kubectl describe <POD_NAME>` and inspect the lifecycle of the pod to debug further. 

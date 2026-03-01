@@ -53,7 +53,7 @@ spec:
     spec:
       containers:
         - name: murphy-star-container
-          image: chenliteaching/cs122b-p5-murphy-star:v1
+          image: <YOUR_DOCKERHUB_USERNAME>/cs122b-p5-murphy-star:v2
           imagePullPolicy: Always
           ports:
             - name: http
@@ -93,7 +93,7 @@ spec:
     spec:
       containers:
         - name: murphy-login-container
-          image: chenliteaching/cs122b-p5-murphy-login:v1
+          image: <YOUR_DOCKERHUB_USERNAME>/cs122b-p5-murphy-login:v2
           imagePullPolicy: Always
           ports:
             - name: http
